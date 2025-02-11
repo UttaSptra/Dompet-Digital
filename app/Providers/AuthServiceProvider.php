@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -21,6 +23,18 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
+
+        Gate::define('manage-users', function (User $user) {
+            return $user->role_id == 1; // Hanya admin
+        });
+    
+        Gate::define('student-actions', function (User $user) {
+            return $user->role_id == 3; // Hanya siswa
+        });
+    
+        Gate::define('approve-topup', function (User $user) {
+            return $user->role_id == 2; // Hanya bank mini
+        });
     }
 }

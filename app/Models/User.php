@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'account_number',
     ];
 
     /**
@@ -42,4 +44,36 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if ($user->role_id == 3 && is_null($user->account_number)) { 
+                $user->account_number = self::generateAccountNumber();
+            }
+        });
+    }
+
+    public static function generateAccountNumber()
+    {
+        do {
+            $accountNumber = mt_rand(1000000000, 9999999999);
+        } while (self::where('account_number', $accountNumber)->exists());
+
+        return $accountNumber;
+    }
+
+public function balance()
+{
+    return $this->hasOne(Balance::class);
+}
+
+public function wallet()
+{
+    return $this->hasOne(Wallet::class);
+}
+
+
 }

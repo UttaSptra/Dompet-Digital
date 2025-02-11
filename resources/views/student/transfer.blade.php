@@ -1,44 +1,31 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Transfer</title>
+</head>
+<body>
 
-@section('content')
-<div class="container">
-    <h2>Transfer Saldo</h2>
+    <h2>Form Transfer Antar Siswa</h2>
+
+    <form method="POST" action="/transfer">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
     
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    
-    <form action="{{ route('transfer') }}" method="POST">
-        @csrf
-        
-        <div class="mb-3">
-            <label for="target_user_id" class="form-label">Pilih Penerima</label>
-            <select name="target_user_id" id="target_user_id" class="form-control" required>
-                <option value="">-- Pilih Penerima --</option>
-                @foreach($users as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        
-        <div class="mb-3">
-            <label for="amount" class="form-label">Jumlah Transfer</label>
-            <input type="number" name="amount" id="amount" class="form-control" min="1000" required>
-        </div>
-        
-        <button type="submit" class="btn btn-primary">Kirim</button>
-    </form>
-</div>
-@endsection
+    <label>Dari Rekening:</label>
+    <input type="text" name="from_account" required>
+
+    <label>Ke Rekening:</label>
+    <input type="text" name="to_account" required>
+
+    <label>Jumlah Transfer:</label>
+    <input type="number" name="amount" required>
+
+    <button type="submit">Transfer</button>
+</form>
+
+
+</body>
+</html>
+
+

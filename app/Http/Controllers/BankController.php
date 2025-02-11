@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Topup;  // Tambahkan ini untuk mengimpor model Topup
 use App\Models\Wallet; // Pastikan juga model Wallet diimpor jika diperlukan
+use Illuminate\Support\Facades\Auth;
 
 class BankController extends Controller
 {
@@ -41,5 +42,17 @@ class BankController extends Controller
     
         return redirect()->back()->with('success', 'Top-up berhasil disetujui.');
     }
-    
+    public function dashboard()
+{
+    // Pastikan hanya user dengan role_id = 2 (Bank Mini) yang bisa melihat
+    if (Auth::user()->role_id !== 2) {
+        return redirect()->route('dashboard')->with('error', 'Anda tidak memiliki akses.');
+    }
+
+    // Ambil daftar top-up yang belum diproses
+    $topups = TopUp::where('status', 'pending')->get();
+
+    // Kirim data ke view
+    return view('bank.bank', compact('topups'));
+}
 }

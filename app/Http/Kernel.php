@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'bank-mini' => \App\Http\Middleware\BankMiniMiddleware::class,
         'role.check' => \App\Http\Middleware\RoleCheck::class,
+        
     ];
 
     
