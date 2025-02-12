@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="topupModal" tabindex="-1" aria-labelledby="topupModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -11,7 +10,7 @@
                     @csrf
                     <div class="mb-3">
                         <label for="amount" class="form-label">Jumlah Top Up</label>
-                        <input type="number" class="form-control" name="amount" required>
+                        <input type="number" class="form-control" name="amount" min="1000" required>
                     </div>
                     <button type="submit" class="btn btn-success">Top Up</button>
                 </form>

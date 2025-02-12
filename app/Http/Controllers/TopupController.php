@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TopUp;
 use App\Models\Wallet;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,8 +32,9 @@ class TopUpController extends Controller
 
     // Menampilkan daftar top-up untuk Bank Mini
     public function index() {
+        $students = User::all(); 
         $topups = TopUp::where('status', 'pending')->get();
-        return view('bank.bank', compact('topups'));
+        return view('dashboard', compact('topups','students'));
     }
 
     // Proses persetujuan atau penolakan

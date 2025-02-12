@@ -34,8 +34,12 @@
 @include('student.topup')
 
 @elseif(auth()->user()->role_id === 2)
-    {{-- Ambil tampilan bank, pastikan $topups dikirim dari controller --}}
+    {{-- Tampilan untuk Bank Mini --}}
     @include('bank.bank', ['topups' => $topups ?? collect()])
+
+@elseif(auth()->user()->role_id === 1)
+    {{-- Tampilan untuk Admin --}}
+    @include('admin.index', ['students' => $students ?? collect()])
 
 @else
     {{-- Jika role tidak dikenali --}}

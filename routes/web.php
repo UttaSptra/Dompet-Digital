@@ -6,6 +6,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\TransferController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,7 @@ Route::middleware(['auth', 'role:3'])->group(function () {
 
 // Routes untuk Bank Mini
 Route::middleware(['auth', 'role:2'])->group(function () {
+    
     Route::get('/bank/topups', [TopUpController::class, 'index'])->name('bank.topups');
     Route::post('/bank/topups/{id}/approve', [TopUpController::class, 'approve'])->name('bank.topups.approve');
     Route::post('/bank/topups/{id}/reject', [TopUpController::class, 'reject'])->name('bank.topups.reject');
@@ -50,6 +52,7 @@ Route::middleware(['auth', 'role:2'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/bank/dashboard', [BankController::class, 'dashboard'])->name('bank.dashboard');
 });
+Route::get('/dashboard', [TopUpController::class, 'index'])->name('dashboard');
 
 // Route khusus untuk login sebagai siswa (untuk testing)
 Route::get('/login-as-siswa', function () {
@@ -58,3 +61,14 @@ Route::get('/login-as-siswa', function () {
     return redirect()->route('student.transfer');
 })->name('login.as.siswa');
 
+
+
+Route::middleware(['auth', 'role:1'])->group(function () {
+    Route::get('/admin/create-user', [AdminController::class, 'create'])->name('admin.createUser');
+    Route::post('/admin/store-user', [AdminController::class, 'store'])->name('admin.storeUser');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [TopUpController::class, 'index'])->name('dashboard');
+});
