@@ -1,31 +1,44 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Transfer</title>
-</head>
-<body>
+@extends('layouts.app')
 
-    <h2>Form Transfer Antar Siswa</h2>
+@section('title', 'Transfer')
 
-    <form method="POST" action="/transfer">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    
-    <label>Dari Rekening:</label>
-    <input type="text" name="from_account" required>
+@section('content')
+<div class="container">
+    <div class="transfer-container mx-auto">
+        <h2 class="text-center mb-4">Form Transfer Antar Siswa</h2>
 
-    <label>Ke Rekening:</label>
-    <input type="text" name="to_account" required>
+        <form method="POST" action="{{ route('student.transfer.post') }}">
+            @csrf
+            
+            <div class="mb-3">
+                <label class="form-label">Dari Rekening:</label>
+                <input type="text" class="form-control" name="from_account" value="{{ auth()->user()->account_number }}" readonly>
+            </div>
 
-    <label>Jumlah Transfer:</label>
-    <input type="number" name="amount" required>
+            <div class="mb-3">
+                <label class="form-label">Ke Rekening:</label>
+                <input type="text" class="form-control" name="to_account" placeholder="Masukkan nomor rekening tujuan" required>
+            </div>
 
-    <button type="submit">Transfer</button>
-</form>
+            <div class="mb-3">
+                <label class="form-label">Jumlah Transfer:</label>
+                <input type="number" class="form-control" name="amount" min="1000" placeholder="Minimal transfer Rp 1.000" required>
+            </div>
 
+            <button type="submit" class="btn btn-primary w-100">Kirim Transfer</button>
+        </form>
+    </div>
+</div>
+@endsection
 
-</body>
-</html>
-
-
+@push('styles')
+<style>
+    .transfer-container {
+        max-width: 500px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+@endpush

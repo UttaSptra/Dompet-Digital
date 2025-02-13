@@ -1,8 +1,4 @@
-@extends('layouts.app')
 
-@section('title', 'Login')
-
-@section('content')
 <div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
     <div class="card shadow-lg p-4" style="width: 350px;">
         <h3 class="text-center mb-4">Login</h3>
@@ -29,4 +25,3 @@
         </form>
     </div>
 </div>
-@endsection

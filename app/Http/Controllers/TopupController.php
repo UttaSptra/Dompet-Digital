@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 
 class TopUpController extends Controller
 {
+    public function dashboard() {
+        return view('dashboard');
+    }
     // Form pengajuan top-up
     public function create() {
         return view('student.topup');
@@ -34,7 +37,7 @@ class TopUpController extends Controller
     public function index() {
         $students = User::all(); 
         $topups = TopUp::where('status', 'pending')->get();
-        return view('dashboard', compact('topups','students'));
+        return view('bank.bank', compact('topups','students'));
     }
 
     // Proses persetujuan atau penolakan

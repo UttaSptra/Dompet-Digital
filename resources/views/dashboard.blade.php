@@ -1,54 +1,48 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Siswa')
+@section('title', 'Dashboard')
 
 @section('content')
-@if(auth()->user()->role_id === 3)
-<div class="container">
-    <h1>Halo, {{ auth()->user()->name }}!</h1>
+<div class="container mt-4">
+    <h1 class="text-center">Selamat Datang, {{ auth()->user()->name }}!</h1>
 
-    <div class="card mb-4">
-        <div class="card-body text-center">
-            <h4>Saldo Anda</h4>
-            <h2>Rp {{ number_format(optional(auth()->user()->wallet)->balance ?? 0, 0, ',', '.') }}</h2>
+    @if(auth()->user()->role_id === 3)
+        {{-- Dashboard untuk Siswa --}}
+        <div class="card shadow-sm p-4 mt-4">
+            <h4 class="text-center">Saldo Anda</h4>
+            <h2 class="text-center text-success">Rp {{ number_format(optional(auth()->user()->wallet)->balance ?? 0, 0, ',', '.') }}</h2>
         </div>
+        
+         {{-- Informasi Akun --}}
+    <div class="card shadow-sm p-4 mt-4">
+        <h4 class="text-center">Informasi Akun</h4>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Nama:</strong> {{ auth()->user()->name }}</li>
+            <li class="list-group-item"><strong>Email:</strong> {{ auth()->user()->email }}</li>
+            <li class="list-group-item"><strong>Tanggal Bergabung:</strong> {{ auth()->user()->created_at->format('d M Y') }}</li>
+        </ul>
     </div>
 
-    <div class="row">
-        <div class="col-md-4">
-            <a href="#topupModal" class="btn btn-success w-100" data-bs-toggle="modal">Top Up</a>
-        </div>
-       
-        <div class="col-md-4">
-            <a href="#withdrawModal" class="btn btn-warning w-100" data-bs-toggle="modal">Tarik Tunai</a>
-        </div>
-        <div class="mt-4 text-center">
-            <a href="{{ route('student.history') }}" class="btn btn-info">Riwayat Transfer</a>
-        </div>
-    </div>
-
-    <!-- Tombol Logout -->
     
+
+    @elseif(auth()->user()->role_id === 2)
+        {{-- Dashboard untuk Bank Mini --}}
+        <div class="card shadow-sm p-4 mt-4">
+            <h4 class="text-center">Verifikasi Top Up</h4>
+            <p class="text-center">Lihat dan kelola pengajuan top up dari siswa.</p>
+            <a href="{{ route('bank.topups') }}" class="btn btn-warning w-100">Kelola Top Up</a>
+        </div>
+
+    @elseif(auth()->user()->role_id === 1)
+        {{-- Dashboard untuk Admin --}}
+        <div class="card shadow-sm p-4 mt-4">
+            <h4 class="text-center">Manajemen Akun</h4>
+            <p class="text-center">Buat akun baru dan kelola pengguna.</p>
+            <a href="{{ route('admin.createUser') }}" class="btn btn-danger w-100">Tambah Pengguna</a>
+        </div>
+
+    @else
+        <p class="text-center text-danger">Anda tidak memiliki akses ke halaman ini.</p>
+    @endif
 </div>
-
-@include('student.topup')
-
-@elseif(auth()->user()->role_id === 2)
-    {{-- Tampilan untuk Bank Mini --}}
-    @include('bank.bank', ['topups' => $topups ?? collect()])
-
-@elseif(auth()->user()->role_id === 1)
-    {{-- Tampilan untuk Admin --}}
-    @include('admin.index', ['students' => $students ?? collect()])
-
-@else
-    {{-- Jika role tidak dikenali --}}
-    <p class="text-center text-danger">Anda tidak memiliki akses ke halaman ini.</p>
-@endif
-<div class="mt-4 text-center">
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
-    </div>
 @endsection

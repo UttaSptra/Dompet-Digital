@@ -44,14 +44,12 @@ Route::middleware(['auth', 'role:3'])->group(function () {
 
 // Routes untuk Bank Mini
 Route::middleware(['auth', 'role:2'])->group(function () {
-    
+    Route::get('/bank/dashboard', [TopUpController::class, 'dashboard'])->name('bank.dashboard');
     Route::get('/bank/topups', [TopUpController::class, 'index'])->name('bank.topups');
     Route::post('/bank/topups/{id}/approve', [TopUpController::class, 'approve'])->name('bank.topups.approve');
     Route::post('/bank/topups/{id}/reject', [TopUpController::class, 'reject'])->name('bank.topups.reject');
 });
-Route::middleware(['auth'])->group(function () {
-    Route::get('/bank/dashboard', [BankController::class, 'dashboard'])->name('bank.dashboard');
-});
+
 Route::get('/dashboard', [TopUpController::class, 'index'])->name('dashboard');
 
 // Route khusus untuk login sebagai siswa (untuk testing)
@@ -71,4 +69,10 @@ Route::middleware(['auth', 'role:1'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [TopUpController::class, 'index'])->name('dashboard');
+});
+Route::middleware(['auth', 'role:1'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/edit-user/{id}', [AdminController::class, 'edit'])->name('admin.editUser');
+    Route::put('/admin/update-user/{id}', [AdminController::class, 'update'])->name('admin.updateUser');
+    Route::delete('/admin/delete-user/{id}', [AdminController::class, 'destroy'])->name('admin.deleteUser');
 });
